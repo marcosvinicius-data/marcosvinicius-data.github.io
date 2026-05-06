@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcos Vinícius — Analista de Dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05050a;--surface:#0d0d17;--card:#111120;--border:rgba(255,255,255,0.06);
+  --text:#f0eeff;--muted:#6e6a8a;
+  --cyan:#00f5d4;--pink:#ff2d78;--yellow:#ffe246;--violet:#9b5de5;--orange:#ff6b2b;
+  --grad1:linear-gradient(135deg,#00f5d4,#9b5de5);
+  --grad2:linear-gradient(135deg,#ff2d78,#ff6b2b);
+  --grad3:linear-gradient(135deg,#ffe246,#00f5d4);
+  --display:'Bebas Neue',sans-serif;
+  --body:'Cabinet Grotesk',sans-serif;
+  --mono:'Fira Code',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:17px;line-height:1.65;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cursor{position:fixed;width:12px;height:12px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .2s,height .2s,background .2s}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,245,212,.4);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--cyan)}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.1rem clamp(1.5rem,5vw,5rem);display:flex;align-items:center;justify-content:space-between;background:rgba(5,5,10,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);animation:slideDown .7s ease both}
+@keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:none;opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+.nav-logo{font-family:var(--display);font-size:1.8rem;letter-spacing:.08em;text-decoration:none;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:2.2rem}
+.nav-links a{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-pill{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:.55rem 1.4rem;background:var(--grad2);color:#fff;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:opacity .2s}
+.nav-pill:hover{opacity:.85}
+
+/* HERO */
+.hero{min-height:100vh;padding:7rem clamp(1.5rem,5vw,5rem) 5rem;display:flex;align-items:center;position:relative;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;opacity:.22;animation:drift 12s ease-in-out infinite alternate}
+.orb1{width:600px;height:600px;top:-150px;right:-100px;background:var(--violet);animation-delay:0s}
+.orb2{width:500px;height:500px;bottom:-100px;left:-150px;background:var(--pink);animation-delay:-4s}
+.orb3{width:350px;height:350px;top:40%;left:40%;background:var(--cyan);animation-delay:-8s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,30px) scale(1.08)}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,245,212,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,212,.025) 1px,transparent 1px);background-size:80px 80px}
+.hero-inner{max-width:1300px;margin:0 auto;width:100%;position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:4rem;align-items:center}
+.hero-tag{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:2rem;border:1px solid rgba(0,245,212,.2);padding:.4rem 1rem;animation:up .7s .2s ease both}
+.hero-tag-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-name{font-family:var(--display);font-size:clamp(5rem,13vw,13rem);line-height:.88;letter-spacing:.03em;animation:up .7s .35s ease both}
+.hero-name .l2{display:block;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-name .l3{display:block;color:rgba(240,238,255,.1);-webkit-text-stroke:1px rgba(240,238,255,.16)}
+.hero-role{font-family:var(--mono);font-size:clamp(.85rem,1.5vw,1.05rem);color:var(--muted);margin:2rem 0 2.5rem;letter-spacing:.05em;animation:up .7s .5s ease both}
+.hero-role span{color:var(--yellow)}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:up .7s .65s ease both}
+.btn-glow{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2.2rem;text-decoration:none;font-family:var(--body);font-weight:700;font-size:.9rem;background:var(--grad1);color:var(--bg);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.btn-glow:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,245,212,.3)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.6rem;padding:.83rem 2.2rem;text-decoration:none;font-family:var(--body);font-weight:700;font-size:.9rem;border:1.5px solid rgba(255,255,255,.12);color:var(--text);transition:border-color .2s,transform .2s}
+.btn-ghost:hover{border-color:var(--cyan);transform:translateY(-3px)}
+.hero-card{background:var(--card);border:1px solid var(--border);padding:2rem;min-width:220px;animation:up .7s .8s ease both;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad1)}
+.hero-card-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem}
+.stats-list{display:flex;flex-direction:column;gap:1.5rem}
+.stat-big{font-family:var(--display);font-size:3rem;letter-spacing:.04em;line-height:1}
+.stat-big.c1{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-big.c2{background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-big.c3{background:var(--grad3);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+
+/* MARQUEE */
+.marquee-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.85rem 0;background:var(--surface)}
+.marquee-track{display:flex;animation:marquee 22s linear infinite;width:max-content}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{font-family:var(--display);font-size:1.05rem;letter-spacing:.1em;white-space:nowrap;padding:0 1.8rem;display:flex;align-items:center;gap:.8rem}
+.marquee-item .dot{font-size:1.2rem;line-height:1}
+.marquee-item.mc{color:var(--cyan)}.marquee-item.mp{color:var(--pink)}.marquee-item.my{color:var(--yellow)}.marquee-item.mv{color:var(--violet)}
+
+/* SECTION */
+.sec{padding:clamp(4rem,8vw,9rem) clamp(1.5rem,5vw,5rem)}
+.inner{max-width:1300px;margin:0 auto}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:.8rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.2rem}
+.sec-eyebrow::before{content:'';width:1.8rem;height:1.5px;background:currentColor}
+.ey-cy{color:var(--cyan)}.ey-pk{color:var(--pink)}.ey-yl{color:var(--yellow)}.ey-vi{color:var(--violet)}
+.sec-title{font-family:var(--display);font-size:clamp(2.8rem,6vw,5.5rem);letter-spacing:.04em;line-height:.95;margin-bottom:.5rem}
+
+/* ABOUT */
+#about{background:var(--surface)}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:6rem;align-items:start;margin-top:4rem}
+.about-avatar{width:200px;height:200px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:5rem;background:var(--grad1);color:var(--bg);clip-path:polygon(15% 0%,100% 0%,85% 100%,0% 100%);margin-bottom:2.5rem}
+.c-stack{display:flex;flex-direction:column;gap:.8rem}
+.c-link{display:flex;align-items:center;gap:.9rem;font-family:var(--mono);font-size:.75rem;text-decoration:none;color:var(--muted);padding:.55rem .8rem;border:1px solid transparent;transition:color .2s,border-color .2s,background .2s}
+.c-link:hover{color:var(--cyan);border-color:rgba(0,245,212,.2);background:rgba(0,245,212,.04)}
+.c-ico{width:22px;text-align:center}
+.about-bio{font-size:1.05rem;color:rgba(240,238,255,.7);line-height:1.9;margin-bottom:1.5rem}
+.skills-wrap{margin-top:2.5rem;display:flex;flex-direction:column;gap:1.4rem}
+.sk-label{font-family:var(--mono);font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.65rem}
+.sk-cy{color:var(--cyan)}.sk-pk{color:var(--pink)}.sk-yl{color:var(--yellow)}.sk-vi{color:var(--violet)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font-family:var(--mono);font-size:.7rem;padding:.28rem .75rem;border:1px solid var(--border);color:var(--muted);transition:all .2s}
+.chip:hover{color:var(--text);border-color:rgba(255,255,255,.25)}
+
+/* PROJECTS */
+#projects{background:var(--bg)}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;margin-bottom:4rem}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)}
+.proj-card{background:var(--card);padding:2.5rem;display:flex;flex-direction:column;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:background .3s}
+.proj-card:hover{background:#161625}
+.proj-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:var(--ca,var(--cyan));opacity:.06;clip-path:polygon(100% 0%,0% 0%,100% 100%);transition:opacity .3s}
+.proj-card:hover::after{opacity:.2}
+.pc1{--ca:var(--cyan)}.pc2{--ca:var(--pink)}.pc3{--ca:var(--yellow)}.pc4{--ca:var(--violet)}.pc5{--ca:var(--orange)}.pc6{--ca:var(--cyan)}
+.proj-num{font-family:var(--display);font-size:4.5rem;letter-spacing:.05em;color:rgba(240,238,255,.04);line-height:1;margin-bottom:.6rem;user-select:none}
+.proj-emoji{font-size:2rem;margin-bottom:1.1rem;display:block}
+.proj-title{font-family:var(--body);font-weight:800;font-size:1.05rem;line-height:1.3;margin-bottom:.9rem}
+.proj-desc{font-size:.88rem;color:var(--muted);line-height:1.7;flex-grow:1;margin-bottom:1.7rem}
+.proj-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.7rem}
+.stag{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:.22rem .6rem}
+.pc1 .stag{background:rgba(0,245,212,.08);color:var(--cyan);border:1px solid rgba(0,245,212,.18)}
+.pc2 .stag{background:rgba(255,45,120,.08);color:var(--pink);border:1px solid rgba(255,45,120,.18)}
+.pc3 .stag{background:rgba(255,226,70,.08);color:var(--yellow);border:1px solid rgba(255,226,70,.18)}
+.pc4 .stag{background:rgba(155,93,229,.08);color:var(--violet);border:1px solid rgba(155,93,229,.18)}
+.pc5 .stag{background:rgba(255,107,43,.08);color:var(--orange);border:1px solid rgba(255,107,43,.18)}
+.pc6 .stag{background:rgba(0,245,212,.08);color:var(--cyan);border:1px solid rgba(0,245,212,.18)}
+.proj-footer{display:flex;align-items:center;border-top:1px solid var(--border);padding-top:1.2rem;margin-top:auto}
+.proj-link{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:.5rem;color:var(--muted);transition:color .2s,gap .2s}
+.proj-card:hover .proj-link{color:var(--text);gap:.9rem}
+
+/* EXPERIENCE */
+#experience{background:var(--surface)}
+.exp-grid{display:grid;grid-template-columns:270px 1fr;gap:4rem;margin-top:4rem}
+.exp-tabs{display:flex;flex-direction:column}
+.exp-tab{padding:1.3rem 1.5rem;border-left:2px solid var(--border);cursor:pointer;transition:background .2s,border-color .2s}
+.exp-tab:hover{background:rgba(255,255,255,.025)}
+.exp-tab.active{border-color:var(--cyan);background:rgba(0,245,212,.04)}
+.et-date{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.exp-tab.active .et-date{color:var(--cyan)}
+.et-co{font-family:var(--body);font-weight:800;font-size:.95rem}
+.et-role{font-family:var(--body);font-size:.83rem;color:var(--muted);margin-top:.1rem}
+.exp-panel{background:var(--card);border:1px solid var(--border);padding:2.5rem;position:relative;overflow:hidden}
+.exp-panel::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--grad1)}
+.ep-co{font-family:var(--mono);font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:.5rem}
+.ep-title{font-family:var(--display);font-size:2.5rem;letter-spacing:.05em;line-height:1;margin-bottom:.3rem}
+.ep-period{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-bottom:2.2rem}
+.ep-list{display:flex;flex-direction:column;gap:.9rem}
+.ep-list li{list-style:none;padding-left:1.4rem;position:relative;color:rgba(240,238,255,.7);font-size:1rem}
+.ep-list li::before{content:'▹';position:absolute;left:0;color:var(--cyan);top:.05rem}
+
+/* EDUCATION */
+#education{background:var(--bg)}
+.edu-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;background:var(--border);margin-top:4rem}
+.edu-card{background:var(--card);padding:2.5rem;position:relative;overflow:hidden}
+.edu-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.edu-card.e1::after{background:var(--grad1)}.edu-card.e2::after{background:var(--grad2)}
+.edu-emoji{font-size:2.5rem;margin-bottom:1.2rem;display:block}
+.edu-deg{font-family:var(--body);font-weight:800;font-size:1.2rem;margin-bottom:.4rem}
+.edu-school{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--cyan);margin-bottom:.3rem}
+.edu-period{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.courses-block{margin-top:5rem}
+.courses-heading{display:flex;align-items:center;gap:1.5rem;font-family:var(--display);font-size:2.5rem;letter-spacing:.05em;margin-bottom:3rem}
+.courses-heading::after{content:'';flex:1;height:1px;background:var(--border)}
+.course-cats{display:flex;flex-direction:column;gap:2rem}
+.cat-title{display:flex;align-items:center;gap:.9rem;font-family:var(--mono);font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.85rem}
+.cat-title::before{content:'';width:1.2rem;height:1.5px;background:currentColor}
+.ct-cy{color:var(--cyan)}.ct-pk{color:var(--pink)}.ct-yl{color:var(--yellow)}.ct-vi{color:var(--violet)}.ct-or{color:var(--orange)}
+.pills{display:flex;flex-wrap:wrap;gap:.45rem}
+.pill{font-family:var(--mono);font-size:.68rem;padding:.28rem .8rem;border:1px solid var(--border);color:var(--muted);transition:all .2s;white-space:nowrap}
+.pill:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.ph{font-size:.58rem;color:rgba(110,106,138,.45);margin-left:.3rem}
+
+/* CONTACT */
+#contact{background:var(--surface)}
+.contact-hero{text-align:center;padding:4rem 0 5rem}
+.contact-big{font-family:var(--display);font-size:clamp(3.5rem,9vw,9rem);letter-spacing:.03em;line-height:.9;margin-bottom:2rem}
+.contact-big .g1{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.contact-big .g2{background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.contact-sub{font-size:1.05rem;color:var(--muted);max-width:50ch;margin:0 auto 3.5rem;line-height:1.8}
+.contact-cards{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
+.contact-card{display:flex;align-items:center;gap:1.2rem;padding:1.3rem 2rem;border:1px solid var(--border);background:var(--card);text-decoration:none;color:var(--text);transition:border-color .2s,transform .2s,background .2s;min-width:250px}
+.contact-card:hover{transform:translateY(-4px);background:rgba(0,245,212,.04);border-color:var(--cyan)}
+.cc-ico{font-size:1.5rem;width:36px;text-align:center}
+.cc-label{font-family:var(--body);font-weight:700;font-size:.95rem}
+.cc-val{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-top:.1rem}
+.cc-arr{margin-left:auto;color:var(--muted);font-size:1.1rem;transition:transform .2s,color .2s}
+.contact-card:hover .cc-arr{transform:translateX(5px);color:var(--cyan)}
+
+/* FOOTER */
+footer{padding:2rem clamp(1.5rem,5vw,5rem);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.ft-copy{font-family:var(--mono);font-size:.67rem;color:var(--muted)}
+.ft-links{display:flex;gap:2rem}
+.ft-links a{font-family:var(--mono);font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:color .2s}
+.ft-links a:hover{color:var(--cyan)}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.rev.in{opacity:1;transform:none}
+.rev.d1{transition-delay:.1s}.rev.d2{transition-delay:.2s}.rev.d3{transition-delay:.3s}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr}.hero-card{display:none}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .proj-grid{grid-template-columns:1fr 1fr}
+  .exp-grid{grid-template-columns:1fr;gap:2.5rem}
+  .contact-cards{flex-direction:column;align-items:center}
+}
+@media(max-width:768px){.proj-grid{grid-template-columns:1fr}.edu-row{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">MV.</a>
+  <div class="nav-links">
+    <a href="#about">Sobre</a><a href="#projects">Projetos</a>
+    <a href="#experience">Experiência</a><a href="#education">Formação</a><a href="#contact">Contato</a>
+  </div>
+  <a class="nav-pill" href="mailto:mvjsilva91@gmail.com">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag"><span class="hero-tag-dot"></span>Disponível para oportunidades</div>
+      <h1 class="hero-name">MARCOS<span class="l2">VINÍCIUS</span><span class="l3">SILVA</span></h1>
+      <p class="hero-role">Analista de Dados · Power BI · Python · SQL · <span>BI & Analytics</span></p>
+      <div class="hero-btns">
+        <a class="btn-glow" href="#projects">Ver Projetos →</a>
+        <a class="btn-ghost" href="mailto:mvjsilva91@gmail.com">Entrar em Contato</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <p class="hero-card-label">// Métricas</p>
+      <div class="stats-list">
+        <div><span class="stat-big c1">6+</span><p class="stat-lbl">Projetos entregues</p></div>
+        <div><span class="stat-big c2">1000h+</span><p class="stat-lbl">Horas de capacitação</p></div>
+        <div><span class="stat-big c3">10+</span><p class="stat-lbl">Tecnologias</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item mc">POWER BI<span class="dot">✦</span></span>
+    <span class="marquee-item mp">PYTHON<span class="dot">✦</span></span>
+    <span class="marquee-item my">SQL / MYSQL<span class="dot">✦</span></span>
+    <span class="marquee-item mv">DATA WAREHOUSE<span class="dot">✦</span></span>
+    <span class="marquee-item mc">PANDAS<span class="dot">✦</span></span>
+    <span class="marquee-item mp">AWS CLOUD<span class="dot">✦</span></span>
+    <span class="marquee-item my">AZURE AZ-900<span class="dot">✦</span></span>
+    <span class="marquee-item mv">LOOKER STUDIO<span class="dot">✦</span></span>
+    <span class="marquee-item mc">EXCEL AVANÇADO<span class="dot">✦</span></span>
+    <span class="marquee-item mp">VBA & MACROS<span class="dot">✦</span></span>
+    <span class="marquee-item my">BIG DATA<span class="dot">✦</span></span>
+    <span class="marquee-item mv">FRONT-END<span class="dot">✦</span></span>
+    <span class="marquee-item mc">POWER BI<span class="dot">✦</span></span>
+    <span class="marquee-item mp">PYTHON<span class="dot">✦</span></span>
+    <span class="marquee-item my">SQL / MYSQL<span class="dot">✦</span></span>
+    <span class="marquee-item mv">DATA WAREHOUSE<span class="dot">✦</span></span>
+    <span class="marquee-item mc">PANDAS<span class="dot">✦</span></span>
+    <span class="marquee-item mp">AWS CLOUD<span class="dot">✦</span></span>
+    <span class="marquee-item my">AZURE AZ-900<span class="dot">✦</span></span>
+    <span class="marquee-item mv">LOOKER STUDIO<span class="dot">✦</span></span>
+    <span class="marquee-item mc">EXCEL AVANÇADO<span class="dot">✦</span></span>
+    <span class="marquee-item mp">VBA & MACROS<span class="dot">✦</span></span>
+    <span class="marquee-item my">BIG DATA<span class="dot">✦</span></span>
+    <span class="marquee-item mv">FRONT-END<span class="dot">✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="inner">
+    <p class="sec-eyebrow ey-cy rev">Sobre mim</p>
+    <h2 class="sec-title rev">Quem<br>sou eu</h2>
+    <div class="about-grid">
+      <div class="rev d1">
+        <div class="about-avatar">MV</div>
+        <div class="c-stack">
+          <a class="c-link" href="mailto:mvjsilva91@gmail.com"><span class="c-ico">✉</span>mvjsilva91@gmail.com</a>
+          <a class="c-link" href="tel:+5521991929191"><span class="c-ico">📱</span>(21) 99192-9191</a>
+          <span class="c-link"><span class="c-ico">📍</span>Taquara, Rio de Janeiro — RJ</span>
+          <a class="c-link" href="https://github.com/mvjsilva91-crypto" target="_blank"><span class="c-ico">⌥</span>github.com/mvjsilva91-crypto</a>
+        </div>
+      </div>
+      <div class="rev d2">
+        <p class="about-bio">Profissional em transição para dados com mais de <strong style="color:var(--cyan)">1000 horas</strong> de capacitação técnica presencial. Graduando em Administração pela Estácio (2023–2026), especializado em Business Intelligence, visualização e análise de dados.</p>
+        <p class="about-bio">Combino visão de negócios com habilidades técnicas — Power BI, Python, SQL e cloud computing — para transformar dados em decisões estratégicas que geram resultado real.</p>
+        <div class="skills-wrap">
+          <div>
+            <p class="sk-label sk-cy">BI & Análise de Dados</p>
+            <div class="chips"><span class="chip">Power BI</span><span class="chip">Looker Studio</span><span class="chip">Excel Avançado</span><span class="chip">VBA & Macros</span><span class="chip">Data Warehouse</span><span class="chip">Power Platform</span></div>
+          </div>
+          <div>
+            <p class="sk-label sk-pk">Programação</p>
+            <div class="chips"><span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">SQL / MySQL</span><span class="chip">Java</span><span class="chip">HTML/CSS/JS</span></div>
+          </div>
+          <div>
+            <p class="sk-label sk-yl">Cloud & Infraestrutura</p>
+            <div class="chips"><span class="chip">AWS (CCP)</span><span class="chip">Azure AZ-900</span><span class="chip">Big Data</span><span class="chip">Windows Server</span><span class="chip">Linux</span></div>
+          </div>
+          <div>
+            <p class="sk-label sk-vi">Ferramentas & Design</p>
+            <div class="chips"><span class="chip">MS Project</span><span class="chip">Photoshop</span><span class="chip">Premiere</span><span class="chip">PowerPoint Pro</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="sec" id="projects">
+  <div class="inner">
+    <div class="proj-header">
+      <div>
+        <p class="sec-eyebrow ey-pk rev">Portfólio</p>
+        <h2 class="sec-title rev">Projetos<br>em Destaque</h2>
+      </div>
+      <a class="btn-ghost rev" href="https://github.com/mvjsilva91-crypto" target="_blank">Ver GitHub →</a>
+    </div>
+    <div class="proj-grid rev">
+      <a class="proj-card pc1" href="https://github.com/mvjsilva91-crypto/dashboard-financeiro-rh-powerbi" target="_blank">
+        <div class="proj-num">01</div><span class="proj-emoji">🥇</span>
+        <h3 class="proj-title">Dashboard Financeiro RH — Power BI</h3>
+        <p class="proj-desc">Dashboard interativo com KPIs estratégicos de RH e financeiro. Modelagem de dados, DAX avançado e visualizações para apoio à tomada de decisão executiva.</p>
+        <div class="proj-stack"><span class="stag">Power BI</span><span class="stag">DAX</span><span class="stag">Modelagem</span><span class="stag">KPIs</span></div>
+        <div class="proj-footer"><span class="proj-link">Ver no GitHub →</span></div>
+      </a>
+      <a class="proj-card pc2" href="https://github.com/mvjsilva91-crypto/clinica-mysql-powerbi" target="_blank">
+        <div class="proj-num">02</div><span class="proj-emoji">🥈</span>
+        <h3 class="proj-title">Sistema de Clínica — MySQL + Power BI</h3>
+        <p class="proj-desc">Banco de dados relacional para gestão de pacientes e consultas. Integração com Power BI para dashboards analíticos e relatórios gerenciais completos.</p>
+        <div class="proj-stack"><span class="stag">MySQL</span><span class="stag">Power BI</span><span class="stag">SQL</span><span class="stag">Relacional</span></div>
+        <div class="proj-footer"><span class="proj-link">Ver no GitHub →</span></div>
+      </a>
+      <a class="proj-card pc3" href="https://github.com/mvjsilva91-crypto/analise-dados-funcionarios-pandas" target="_blank">
+        <div class="proj-num">03</div><span class="proj-emoji">📊</span>
+        <h3 class="proj-title">Análise de Dados com Python (Pandas)</h3>
+        <p class="proj-desc">Manipulação, tratamento e análise exploratória de dados com Python e Pandas. Geração de insights para suporte à tomada de decisão.</p>
+        <div class="proj-stack"><span class="stag">Python</span><span class="stag">Pandas</span><span class="stag">EDA</span><span class="stag">Data Viz</span></div>
+        <div class="proj-footer"><span class="proj-link">Ver no GitHub →</span></div>
+      </a>
+      <a class="proj-card pc4" href="https://github.com/mvjsilva91-crypto/sistema-universidade-modelagem-sql" target="_blank">
+        <div class="proj-num">04</div><span class="proj-emoji">🥉</span>
+        <h3 class="proj-title">Sistema Universitário — Modelagem SQL</h3>
+        <p class="proj-desc">Banco de dados acadêmico com alunos, cursos e matrículas. Modelagem DER, tabelas relacionais e queries analíticas.</p>
+        <div class="proj-stack"><span class="stag">SQL</span><span class="stag">Modelagem</span><span class="stag">DER</span><span class="stag">Relacional</span></div>
+        <div class="proj-footer"><span class="proj-link">Ver no GitHub →</span></div>
+      </a>
+      <a class="proj-card pc5" href="https://github.com/mvjsilva91-crypto/Rio-crime-analise-PowerBI" target="_blank">
+        <div class="proj-num">05</div><span class="proj-emoji">📈</span>
+        <h3 class="proj-title">Análise de Crimes — Power BI</h3>
+        <p class="proj-desc">Dashboard de criminalidade no Rio de Janeiro. Identificação de padrões, tendências e indicadores de segurança pública com dados geográficos.</p>
+        <div class="proj-stack"><span class="stag">Power BI</span><span class="stag">DAX</span><span class="stag">Geo Data</span><span class="stag">Analytics</span></div>
+        <div class="proj-footer"><span class="proj-link">Ver no GitHub →</span></div>
+      </a>
+      <a class="proj-card pc6" href="https://github.com/mvjsilva91-crypto/eletrocenter-site-html-css-js" target="_blank">
+        <div class="proj-num">06</div><span class="proj-emoji">🌐</span>
+        <h3 class="proj-title">Site Responsivo — Eletrocenter</h3>
+        <p class="proj-desc">Site responsivo com HTML, CSS e JavaScript. Layout moderno com navegação intuitiva e UX otimizada para múltiplos dispositivos.</p>
+        <div class="proj-stack"><span class="stag">HTML</span><span class="stag">CSS</span><span class="stag">JavaScript</span><span class="stag">Responsive</span></div>
+        <div class="proj-footer"><span class="proj-link">Ver no GitHub →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="sec" id="experience">
+  <div class="inner">
+    <p class="sec-eyebrow ey-yl rev">Trajetória</p>
+    <h2 class="sec-title rev">Experiência<br>Profissional</h2>
+    <div class="exp-grid rev">
+      <div class="exp-tabs" id="exp-tabs">
+        <div class="exp-tab active" data-idx="0"><p class="et-date">Abr 2024 – Out 2024</p><p class="et-co">M. Dias Branco S.A.</p><p class="et-role">Auxiliar de Produção</p></div>
+        <div class="exp-tab" data-idx="1"><p class="et-date">Ago 2023 – Abr 2024</p><p class="et-co">Randstad Brasil</p><p class="et-role">Auxiliar de Produção</p></div>
+        <div class="exp-tab" data-idx="2"><p class="et-date">~2 anos</p><p class="et-co">Consult LTDA</p><p class="et-role">Aux. Serviços Gerais</p></div>
+        <div class="exp-tab" data-idx="3"><p class="et-date">Período variável</p><p class="et-co">Autônomo</p><p class="et-role">Auxiliar de Pedreiro</p></div>
+      </div>
+      <div class="exp-panel" id="exp-panel">
+        <p class="ep-co">M. Dias Branco S.A. — Indústria e Comércio de Alimentos</p>
+        <h3 class="ep-title">Auxiliar de Produção</h3>
+        <p class="ep-period">Abril 2024 – Outubro 2024</p>
+        <ul class="ep-list">
+          <li>Abastecimento de materiais, separação de produtos e montagem de paletes em ritmo industrial</li>
+          <li>Transporte interno com paleteira elétrica e manual em ambiente fabril</li>
+          <li>Organização e manutenção conforme normas de segurança do trabalho</li>
+          <li>Controle de fluxo produtivo e cumprimento de metas diárias</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="sec" id="education">
+  <div class="inner">
+    <p class="sec-eyebrow ey-vi rev">Formação</p>
+    <h2 class="sec-title rev">Educação &<br>Certificações</h2>
+    <div class="edu-row rev">
+      <div class="edu-card e1"><span class="edu-emoji">🎓</span><p class="edu-deg">Administração — Bacharelado</p><p class="edu-school">Estácio · Rio de Janeiro</p><p class="edu-period">2023 – 2026 · Em andamento</p></div>
+      <div class="edu-card e2"><span class="edu-emoji">📜</span><p class="edu-deg">Técnico em Administração</p><p class="edu-school">Senac · Rio de Janeiro</p><p class="edu-period">Interrompido — 7 de 12 meses concluídos</p></div>
+    </div>
+    <div class="courses-block rev">
+      <h3 class="courses-heading">Cursos Complementares</h3>
+      <div class="course-cats">
+        <div>
+          <p class="cat-title ct-cy">Business Intelligence & Dados</p>
+          <div class="pills">
+            <span class="pill">Análise de Dados com Power BI<span class="ph">60h</span></span>
+            <span class="pill">Power BI — Senai<span class="ph">32h</span></span>
+            <span class="pill">Google Looker Studio<span class="ph">32h</span></span>
+            <span class="pill">Modelagem em Data Warehouse<span class="ph">40h</span></span>
+            <span class="pill">PL-900 Power Platform<span class="ph">40h</span></span>
+            <span class="pill">Excel com Business Intelligence<span class="ph">40h</span></span>
+          </div>
+        </div>
+        <div>
+          <p class="cat-title ct-pk">Programação & Desenvolvimento</p>
+          <div class="pills">
+            <span class="pill">Python para Data Science<span class="ph">60h</span></span>
+            <span class="pill">Programação em Python<span class="ph">60h</span></span>
+            <span class="pill">Administrador de Banco de Dados<span class="ph">160h</span></span>
+            <span class="pill">Programação Java<span class="ph">120h</span></span>
+            <span class="pill">Desenvolvedor Front-End<span class="ph">160h</span></span>
+            <span class="pill">Banco de Dados p/ Data Science<span class="ph">40h</span></span>
+            <span class="pill">Implementação em Big Data<span class="ph">40h</span></span>
+          </div>
+        </div>
+        <div>
+          <p class="cat-title ct-yl">Excel Avançado</p>
+          <div class="pills">
+            <span class="pill">Excel Avançado<span class="ph">36h</span></span>
+            <span class="pill">Excel com VBA<span class="ph">30h</span></span>
+            <span class="pill">Iniciação em Macros<span class="ph">24h</span></span>
+            <span class="pill">Dashboards & Planilhas Interativas<span class="ph">28h</span></span>
+            <span class="pill">IA com Excel<span class="ph">20h</span></span>
+          </div>
+        </div>
+        <div>
+          <p class="cat-title ct-vi">Cloud Computing</p>
+          <div class="pills">
+            <span class="pill">AWS Cloud Practitioner Foundational<span class="ph">40h</span></span>
+            <span class="pill">Microsoft Azure AZ-900<span class="ph">40h</span></span>
+            <span class="pill">Windows Server 2019<span class="ph">36h</span></span>
+            <span class="pill">Desvendando Data Centers<span class="ph">20h</span></span>
+          </div>
+        </div>
+        <div>
+          <p class="cat-title ct-or">Design & Comunicação</p>
+          <div class="pills">
+            <span class="pill">Photoshop<span class="ph">40h</span></span>
+            <span class="pill">Edição de Vídeo — Premiere<span class="ph">40h</span></span>
+            <span class="pill">PowerPoint Profissional<span class="ph">24h</span></span>
+            <span class="pill">Criação para Mídias Sociais<span class="ph">28h</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec" id="contact">
+  <div class="inner">
+    <div class="contact-hero rev">
+      <h2 class="contact-big"><span class="g1">VAMOS</span><br><span class="g2">TRABALHAR</span><br><span class="g1">JUNTOS?</span></h2>
+      <p class="contact-sub">Disponível para posições em análise de dados, BI e projetos que transformem dados em valor estratégico real.</p>
+      <div class="contact-cards">
+        <a class="contact-card" href="mailto:mvjsilva91@gmail.com"><span class="cc-ico">✉</span><div><p class="cc-label">E-mail</p><p class="cc-val">mvjsilva91@gmail.com</p></div><span class="cc-arr">→</span></a>
+        <a class="contact-card" href="tel:+5521991929191"><span class="cc-ico">📱</span><div><p class="cc-label">WhatsApp / Telefone</p><p class="cc-val">(21) 99192-9191</p></div><span class="cc-arr">→</span></a>
+        <a class="contact-card" href="https://github.com/mvjsilva91-crypto" target="_blank"><span class="cc-ico">⌥</span><div><p class="cc-label">GitHub</p><p class="cc-val">mvjsilva91-crypto</p></div><span class="cc-arr">→</span></a>
+        <a class="contact-card" href="https://linkedin.com/in/marcosviniciussilva" target="_blank"><span class="cc-ico">💼</span><div><p class="cc-label">LinkedIn</p><p class="cc-val">linkedin.com/in/marcosviniciussilva</p></div><span class="cc-arr">→</span></a>
+        <div class="contact-card"><span class="cc-ico">📍</span><div><p class="cc-label">Localização</p><p class="cc-val">Taquara, Rio de Janeiro — RJ</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="ft-copy">© 2026 Marcos Vinícius de Jesus da Silva</p>
+  <div class="ft-links"><a href="https://github.com/mvjsilva91-crypto" target="_blank">GitHub</a><a href="mailto:mvjsilva91@gmail.com">E-mail</a></div>
+</footer>
+
+<script>
+// Custom cursor
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';cur.style.background='var(--pink)';ring.style.width='52px';ring.style.height='52px';ring.style.borderColor='rgba(255,45,120,.4)'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='12px';cur.style.height='12px';cur.style.background='var(--cyan)';ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(0,245,212,.4)'});
+});
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}})},{threshold:0.08});
+document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
+
+// Experience tabs
+const expData=[
+  {co:'M. Dias Branco S.A. — Indústria e Comércio de Alimentos',title:'Auxiliar de Produção',period:'Abril 2024 – Outubro 2024',items:['Abastecimento de materiais, separação de produtos e montagem de paletes','Transporte interno com paleteira elétrica e manual em ambiente fabril','Organização e manutenção conforme normas de segurança do trabalho','Controle de fluxo produtivo e cumprimento de metas diárias']},
+  {co:'Randstad Brasil Recursos Humanos LTDA',title:'Auxiliar de Produção',period:'Agosto 2023 – Abril 2024',items:['Atividades de logística interna e controle de materiais','Montagem e transporte de paletes em operações de alto volume','Suporte às equipes de produção com foco em eficiência operacional']},
+  {co:'Consult — Consultoria de Pessoas e Serviços Temporários LTDA',title:'Auxiliar de Serviços Gerais',period:'Aproximadamente 2 anos',items:['Separação, armazenamento e despacho de produtos','Controle de estoque com registro de entradas e saídas','Manutenção e limpeza do ambiente de trabalho']},
+  {co:'Autônomo',title:'Auxiliar de Pedreiro',period:'Período variável',items:['Apoio em obras civis e reformas residenciais','Transporte e organização de materiais de construção','Manutenção e limpeza do canteiro de obras']}
+];
+const panel=document.getElementById('exp-panel');
+document.querySelectorAll('.exp-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.exp-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const d=expData[+t.dataset.idx];
+    panel.innerHTML=`<p class="ep-co">${d.co}</p><h3 class="ep-title">${d.title}</h3><p class="ep-period">${d.period}</p><ul class="ep-list">${d.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  });
+});
+</script>
+</body>
+</html>
